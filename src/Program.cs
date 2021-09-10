@@ -57,10 +57,13 @@ namespace OctopusEnergyExporter
             var gasStandingCharge = config["GAS_STANDING_CHARGE"];
             var gasUnitCharge = config["GAS_UNIT_CHARGE"];
             var retry = config["RETRY_SECONDS"];
+
             var port = config["PORT"];
+
 
             var encodedApiKey = EncodeAPIKey(apiKey);
 
+            if (port == null) { port = "9101"; }
             var portNumber = int.Parse(port);
             var server = new MetricServer(port: portNumber);
             server.Start();
@@ -104,6 +107,7 @@ namespace OctopusEnergyExporter
                 var parsedGasUnitCharge = double.Parse(gasUnitCharge);
                 GasUnitCharge.Set(parsedGasUnitCharge);
 
+                if (retry == null) { retry = "300";}
                 var retrySeconds = int.Parse(retry);
                 var retryMilliSeconds = retrySeconds * 1000;
                 await Task.Delay(retryMilliSeconds);
