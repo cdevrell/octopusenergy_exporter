@@ -10,32 +10,32 @@ namespace OctopusEnergyExporter
     class Program
     {
         private static readonly Gauge ElecConsumption =
-            Metrics.CreateGauge("elec_consuption", "Amount of electricity consumed in last 30 mins");
+            Metrics.CreateGauge("octoenergy_elec_consumption", "Amount of electricity consumed in last 30 mins");
 
         private static readonly Gauge ElecStandingCharge =
-            Metrics.CreateGauge("elec_standing_charge", "Cost of electricity per day");
+            Metrics.CreateGauge("octoenergy_elec_standing_charge", "Cost of electricity per day");
 
         private static readonly Gauge ElecUnitCharge =
-            Metrics.CreateGauge("elec_unit_charge", "Cost of electricity per kWh");
+            Metrics.CreateGauge("octoenergy_elec_unit_charge", "Cost of electricity per kWh");
 
         private static readonly Gauge ElecLastUpdated =
-            Metrics.CreateGauge("elec_last_updated", "Timestamp of the latest electricity reading",
+            Metrics.CreateGauge("octoenergy_elec_last_updated", "Timestamp of the latest electricity reading",
                 new GaugeConfiguration
                 {
                     LabelNames = new[] { "lastupdated" }
                 });
 
         private static readonly Gauge GasConsumption =
-            Metrics.CreateGauge("gas_consuption", "Amount of gas consumed in last 30 mins");
+            Metrics.CreateGauge("octoenergy_gas_consumption", "Amount of gas consumed in last 30 mins");
 
         private static readonly Gauge GasStandingCharge =
-            Metrics.CreateGauge("gas_standing_charge", "Cost of gas per day");
+            Metrics.CreateGauge("octoenergy_gas_standing_charge", "Cost of gas per day");
 
         private static readonly Gauge GasUnitCharge =
-            Metrics.CreateGauge("gas_unit_charge", "Cost of gas per kWh");
+            Metrics.CreateGauge("octoenergy_gas_unit_charge", "Cost of gas per kWh");
 
         private static readonly Gauge GasLastUpdated =
-            Metrics.CreateGauge("gas_last_updated", "Timestamp of the latest gas reading",
+            Metrics.CreateGauge("octoenergy_gas_last_updated", "Timestamp of the latest gas reading",
                 new GaugeConfiguration
                 {
                     LabelNames = new[] { "lastupdated" }
@@ -57,9 +57,7 @@ namespace OctopusEnergyExporter
             var gasStandingCharge = config["GAS_STANDING_CHARGE"];
             var gasUnitCharge = config["GAS_UNIT_CHARGE"];
             var retry = config["RETRY_SECONDS"];
-
             var port = config["PORT"];
-
 
             var encodedApiKey = EncodeAPIKey(apiKey);
 
@@ -74,14 +72,13 @@ namespace OctopusEnergyExporter
                 if (latestElecValue.Result == null)
                 {
                     ElecConsumption.Set(0);
-                    ElecConsumption.WithLabels("Null").Set(0);
+                    ElecConsumption.WithLabels("null").Set(0);
                 }
                 else
                 {
                     ElecConsumption.Set(latestElecValue.Result.consumption);
                     ElecLastUpdated.WithLabels($"{latestElecValue.Result.interval_end}").Set(0);
                 }
-
 
                 var parsedElecStandingCharge = double.Parse(elecStandingCharge);
                 ElecStandingCharge.Set(parsedElecStandingCharge);
