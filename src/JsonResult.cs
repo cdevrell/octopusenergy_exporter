@@ -15,7 +15,7 @@ namespace OctopusEnergyExporter
     public class Result
     {
         public double consumption { get; set; }
-        public DateTime interval_start { get; set; }
-        public DateTime interval_end { get; set; }
+        public DateTimeOffset interval_start { get; set; }
+        public DateTimeOffset interval_end { get; set; }
     }
 }
